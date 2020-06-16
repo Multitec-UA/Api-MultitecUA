@@ -1,2 +1,6 @@
-node_modules/
 .idea/
+firebase-debug.log
+functions/credentials.json
+functions/firebse-debug.log
+functions/node_modules/
+ui-debug.log
