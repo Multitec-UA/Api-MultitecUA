@@ -19,7 +19,6 @@ app.get('/hello-world', (req, res) => {
     return res.status(200).send('Hello World!');
 });
 
-//PRUEBA
 // create
 app.post('/api/create', (req, res) => {
     console.log(req.body);
