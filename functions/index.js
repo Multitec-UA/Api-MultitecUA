@@ -15,13 +15,18 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
+/**
+ * @description
+ * Genera una respuesta de "Hello world" para comprobar que el servidor está activo.
+ */
 app.get('/hello-world', (req, res) => {
     return res.status(200).send('Hello World!');
 });
 
-
-
-// create
+/**
+ * @description
+ * Crea un miembro a partir de los datos introducidos.
+ */
 app.post('/api/crear-miembro', (req, res) => {
     console.log(req.body);
     (async () => {
@@ -36,9 +41,12 @@ app.post('/api/crear-miembro', (req, res) => {
     })();
 });
 
-// create
+/**
+ * @description
+ * Obtiene un miembro a partir de su id.
+ */
 app.get('/api/get-miembros/:idMiembro', (req, res) => {
-    console.log(req.params.idMiembro);
+    //console.log(req.params.idMiembro);
     let miembros = db.collection('miembros').doc(req.params.idMiembro);
     let getDoc = miembros.get()
         .then(doc => {
@@ -55,6 +63,10 @@ app.get('/api/get-miembros/:idMiembro', (req, res) => {
         });
 });
 
+/**
+ * @description
+ * obtiene todos los miembros.
+ */
 app.get('/api/get-miembros/', (req, res) => {
     let miembros = db.collection('miembros')
     let getDoc = miembros.get()
