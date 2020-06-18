@@ -91,10 +91,11 @@ app.put('/api/update-miembro/:idMiembro', (req, res) => {
     (async () => {
         try {
             const document = db.collection('miembros').doc(req.params.idMiembro);
-            await document.update({
-                item: req.body.item
+            await document.set(req.body, {
+                merge: true
+            }).then(doc => {
+                return res.status(200).send(doc);
             });
-            return res.status(200).send();
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
@@ -111,7 +112,7 @@ app.delete('/api/delete-miembro/:idMiembro', (req, res) => {
         try {
             const document = db.collection('miembros').doc(req.params.idMiembro);
             await document.delete();
-            return res.status(200).send();
+            return res.status(200).send('Usuario eliminado');
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
