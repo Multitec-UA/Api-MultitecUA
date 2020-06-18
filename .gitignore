@@ -3,4 +3,5 @@ firebase-debug.log
 functions/credentials.json
 functions/firebase-debug.log
 functions/node_modules/
+node_modules/
 ui-debug.log
