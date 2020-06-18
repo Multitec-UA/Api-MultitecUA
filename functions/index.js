@@ -83,4 +83,40 @@ app.get('/api/get-miembros/', (req, res) => {
         });
 });
 
+/**
+ * @description
+ * Actualiza un miembro con los datos introducidos a partir de de su id.
+ */
+app.put('/api/update-miembro/:idMiembro', (req, res) => {
+    (async () => {
+        try {
+            const document = db.collection('miembros').doc(req.params.idMiembro);
+            await document.update({
+                item: req.body.item
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+/**
+ * @description
+ * Elimina un miembro a partir de su id.
+ */
+app.delete('/api/delete-miembro/:idMiembro', (req, res) => {
+    (async () => {
+        try {
+            const document = db.collection('miembros').doc(req.params.idMiembro);
+            await document.delete();
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
 exports.app = functions.https.onRequest(app);
