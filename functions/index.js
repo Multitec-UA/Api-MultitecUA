@@ -20,7 +20,7 @@ const db = admin.firestore();
  * Genera una respuesta de "Hello world" para comprobar que el servidor está activo.
  */
 app.get('/hello-world', (req, res) => {
-    return res.status(200).send('Hello World!');
+    return res.status(200).json({ status:'ok', data:'Hello World!' });
 });
 
 /**
@@ -33,10 +33,10 @@ app.post('/api/crear-miembro', (req, res) => {
         try {
             await db.collection('miembros').doc('/' + req.body.numero_socio + '/')
                 .create(req.body);
-            return res.status(200).send();
+            return res.status(200).json({ status:'ok' });
         } catch (error) {
             console.log(error);
-            return res.status(500).send(error);
+            return res.status(500).json({ status:'error', error: error });
         }
     })();
 });
@@ -52,10 +52,10 @@ app.get('/api/get-miembros/:idMiembro', (req, res) => {
         .then(doc => {
             if (!doc.exists) {
                 console.log('No such document!');
-                return res.status(500).send(error);
+                return res.status(500).json({ status:'error', error: error });
             } else {
                 console.log('Document data:', doc.data());
-                return res.status(200).send(doc.data());
+                return res.status(200).json({ status:'ok', data: doc.data() });
             }
         })
         .catch(err => {
@@ -69,14 +69,10 @@ app.get('/api/get-miembros/:idMiembro', (req, res) => {
  */
 app.get('/api/get-miembros/', (req, res) => {
     let miembros = db.collection('miembros')
-    let getDoc = miembros.get()
+    miembros.get()
         .then(snapshot => {
-            let miembros_res = [];
-            snapshot.forEach(doc => {
-                console.log(doc.id, '=>', doc.data());
-                miembros_res.push(doc.data());
-            });
-            return res.status(200).send(miembros_res);
+            const miembros_res = snapshot.docs.map(doc => doc.data());
+            return res.status(200).json({ status:'ok', data:miembros_res });
         })
         .catch(err => {
             console.log('Error getting document', err);
@@ -94,11 +90,11 @@ app.put('/api/update-miembro/:idMiembro', (req, res) => {
             await document.set(req.body, {
                 merge: true
             }).then(doc => {
-                return res.status(200).send(doc);
+                return res.status(200).json({ status:'ok', data:doc });
             });
         } catch (error) {
             console.log(error);
-            return res.status(500).send(error);
+            return res.status(500).json({ status:'error', error: error });
         }
     })();
 });
@@ -112,10 +108,10 @@ app.delete('/api/delete-miembro/:idMiembro', (req, res) => {
         try {
             const document = db.collection('miembros').doc(req.params.idMiembro);
             await document.delete();
-            return res.status(200).send('Usuario eliminado');
+            return res.status(200).json({ status:'ok' });
         } catch (error) {
             console.log(error);
-            return res.status(500).send(error);
+            return res.status(500).json({ status:'error', error: error });
         }
     })();
 });
