@@ -44,14 +44,14 @@ app.post('/api/crear-miembro', async (req, res) => {
  * @description
  * Obtiene un miembro a partir de su id.
  */
-app.get('/api/get-miembros/:idMiembro', (req, res) => {
+app.get('/api/get-miembros/:idMiembro', async (req, res) => {
     //console.log(req.params.idMiembro);
     try {
         const miembros = db.collection('miembros').doc(req.params.idMiembro);
         const doc = await miembros.get()
         if (!doc.exists) {
             console.log('No such document!');
-            return res.status(500).json({ status:'error', error: error });
+            return res.status(500).json({ status:'error', error: 'No such document!' });
         } else {
             console.log('Document data:', doc.data());
             return res.status(200).json({ status:'ok', data: doc.data() });
